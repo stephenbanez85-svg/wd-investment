@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WD Investment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    img.logo {
+      width: 200px;
+      margin: 40px auto 30px;
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      background: #1877f2; /* Facebook blue */
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #145dbf;
+    }
+
+    .link {
+      color: #1877f2;
+      margin-top: 15px;
+      font-size: 14px;
+      cursor: pointer;
+      display: block;
+    }
+
+    /* Dashboard */
+    .dashboard {
+      display: none;
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    .card {
+      background: #f0f2f5;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: left;
+    }
+    .logout {
+      background: #d9534f;
+      margin-top: 15px;
+    }
+    .logout:hover {
+      background: #b52b27;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Page -->
+  <div class="container" id="loginPage">
+    <img src="images.png" alt="WD Logo" class="logo">
+    <input type="tel" id="loginNumber" placeholder="Mobile number" maxlength="11">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button onclick="login()">Log In</button>
+    <div class="link" onclick="showRegister()">Register</div>
+  </div>
+
+  <!-- Register Page -->
+  <div class="container" id="registerPage" style="display:none;">
+    <img src="images.png" alt="WD Logo" class="logo">
+    <input type="tel" id="regNumber" placeholder="Mobile number" maxlength="11">
+    <input type="password" id="regPassword" placeholder="Password">
+    <button onclick="register()">Sign Up</button>
+    <div class="link" onclick="showLogin()">Already have an account? Log In</div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard" id="dashboardPage">
+    <img src="images.png" alt="WD Logo" class="logo">
+    <h2>Welcome 👋</h2>
+    <p style="color:gray;">Your WD Investment Dashboard</p>
+
+    <div class="card">
+      <h3>💾 Invest in Hard Drives</h3>
+      <p>Start your journey with storage hardware investments.</p>
+      <button onclick="alert('✅ You invested in Hard Drives!')">Invest Now</button>
+    </div>
+
+    <div class="card">
+      <h3>💰 Your Balance</h3>
+      <p>₱0.00 (Demo only)</p>
+    </div>
+
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+    function showRegister() {
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("registerPage").style.display = "block";
+    }
+    function showLogin() {
+      document.getElementById("registerPage").style.display = "none";
+      document.getElementById("loginPage").style.display = "block";
+    }
+
+    function register() {
+      let num = document.getElementById("regNumber").value;
+      let pass = document.getElementById("regPassword").value;
+
+      let phPattern = /^09\d{9}$/;
+      if (!phPattern.test(num)) {
+        alert("❌ Enter a valid PH phone number (09XXXXXXXXX).");
+        return;
+      }
+      if (pass.length < 3) {
+        alert("❌ Password must be at least 3 characters.");
+        return;
+      }
+
+      localStorage.setItem("userNumber", num);
+      localStorage.setItem("userPassword", pass);
+      alert("✅ Registration successful! You can now login.");
+      showLogin();
+    }
+
+    function login() {
+      let num = document.getElementById("loginNumber").value;
+      let pass = document.getElementById("loginPassword").value;
+
+      let storedNum = localStorage.getItem("userNumber");
+      let storedPass = localStorage.getItem("userPassword");
+
+      if (num === storedNum && pass === storedPass) {
+        localStorage.setItem("loggedIn", "true");
+        showDashboard();
+      } else {
+        alert("❌ Invalid number or password!");
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("registerPage").style.display = "none";
+      document.getElementById("dashboardPage").style.display = "block";
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedIn");
+      document.getElementById("dashboardPage").style.display = "none";
+      document.getElementById("loginPage").style.display = "block";
+    }
+
+    window.onload = function() {
+      if (localStorage.getItem("loggedIn") === "true") {
+        showDashboard();
+      }
+    }
+  </script>
+
+</body>
+</html>
